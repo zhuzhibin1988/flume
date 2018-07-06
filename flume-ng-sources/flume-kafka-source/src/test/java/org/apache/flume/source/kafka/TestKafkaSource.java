@@ -20,7 +20,6 @@ package org.apache.flume.source.kafka;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import junit.framework.Assert;
-import kafka.common.TopicExistsException;
 import kafka.utils.ZKGroupTopicDirs;
 import kafka.utils.ZkUtils;
 import org.apache.avro.io.BinaryEncoder;
@@ -101,15 +100,10 @@ public class TestKafkaSource {
   public void setup() throws Exception {
     kafkaSource = new KafkaSource();
     kafkaServer = new KafkaSourceEmbeddedKafka(null);
-    try {
-      kafkaServer.createTopic(topic0, 1);
-      usedTopics.add(topic0);
-      kafkaServer.createTopic(topic1, 3);
-      usedTopics.add(topic1);
-    } catch (TopicExistsException e) {
-      //do nothing
-      e.printStackTrace();
-    }
+    kafkaServer.createTopic(topic0, 1);
+    usedTopics.add(topic0);
+    kafkaServer.createTopic(topic1, 3);
+    usedTopics.add(topic1);
     context = prepareDefaultContext("flume-group");
     kafkaSource.setChannelProcessor(createGoodChannel());
   }
